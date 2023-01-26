@@ -1,76 +1,38 @@
+import { useState } from "react";
+
 const App = () => {
-  const course = "Half Stack application development";
-  const parts = [
-    {
-      name: "Fundamentals of React",
-      exercises: 10,
-    },
-    {
-      name: "Using props to pass data",
-      exercises: 7,
-    },
-    {
-      name: "State of a component",
-      exercises: 14,
-    },
-  ];
+  const [counter, setCounter] = useState(0);
+  console.log("rendering with counter value", counter);
+
+  const setToZero = () => {
+    setCounter(0);
+    console.log("resetting to zero, value before", counter);
+  };
+  const increaseByOne = () => {
+    setCounter(counter + 1);
+    console.log("increasing, value before", counter);
+  };
+  const decreaseByOne = () => {
+    setCounter(counter - 1);
+    console.log("decreasing, value before", counter);
+  };
+
   return (
     <>
-      <Header course={course} />
-      <Content parts={parts} />
-      <Total parts={parts} />
+      <Display counter={counter} />
+      <Button onClick={increaseByOne} text={"Increase"}></Button>
+      <Button onClick={decreaseByOne} text={"decrease"}></Button>
+      <Button onClick={setToZero} text={"zero"}></Button>
     </>
   );
 };
 
-const Header = (props) => {
-  return (
-    <div>
-      <h1>{props.course}</h1>
-    </div>
-  );
-};
+const Display = ({ counter }) => <>{counter}</>;
 
-const Content = (props) => {
-  return (
-    <>
-      <Part
-        partName={props.parts[0].name}
-        exerciseCount={props.parts[0].exercises}
-      />
-      <Part
-        partName={props.parts[1].name}
-        exerciseCount={props.parts[1].exercises}
-      />
-      <Part
-        partName={props.parts[2].name}
-        exerciseCount={props.parts[2].exercises}
-      />
-    </>
-  );
-};
-
-const Total = (props) => {
-  return (
-    <>
-      <p>
-        number of exercises{" "}
-        {props.parts[0].exercises +
-          props.parts[1].exercises +
-          props.parts[2].exercises}
-      </p>
-    </>
-  );
-};
-
-const Part = (props) => {
-  return (
-    <>
-      <p>
-        {props.partName} {props.exerciseCount}
-      </p>
-    </>
-  );
-};
+const Button = ({ onClick, text }) => (
+  <>
+    <button onClick={onClick}>{text}</button>
+  </>
+);
 
 export default App;
