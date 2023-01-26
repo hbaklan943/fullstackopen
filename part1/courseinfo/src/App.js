@@ -19,6 +19,7 @@ const App = () => {
 
   return (
     <>
+      <p>ubuntuuu</p>
       <Display counter={counter} />
       <Button onClick={increaseByOne} text={"Increase"}></Button>
       <Button onClick={decreaseByOne} text={"decrease"}></Button>
