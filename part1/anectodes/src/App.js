@@ -15,13 +15,25 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [voteCounts, setVoteCounts] = useState(new Uint8Array(8))
 
+  const findMostVoted = () => {
+    let highestVoteCount = voteCounts[0];
+    let mostVotedAnectod = 0;
+    for (let i = 0; i < voteCounts.length; i++) {
+      if (voteCounts[i] > highestVoteCount) {
+        highestVoteCount = voteCounts[i];
+        mostVotedAnectod = i;
+
+      }
+    }
+    return mostVotedAnectod;
+
+  }
   const voteHandler = (selected) => {
     const copyOfVoteCounts = [...voteCounts]
     copyOfVoteCounts[selected] = (voteCounts[selected] + 1);
     setVoteCounts(copyOfVoteCounts);
   }
   const anectodeHandler = () => {
-    console.log(voteCounts)
     const newAnectode = Math.floor(Math.random() * 8)
     if (newAnectode === anectodes) anectodeHandler();
     setSelected(newAnectode)
@@ -34,6 +46,9 @@ const App = () => {
       <p>{voteCounts[selected]}</p>
       <button onClick={() => voteHandler(selected)}>Vote</button>
       <button onClick={anectodeHandler}>Next Anectode</button>
+      <p>Most voted anectode</p>
+      <p>{anectodes[findMostVoted()]}</p>
+
     </>
   )
 }
