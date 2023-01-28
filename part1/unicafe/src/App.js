@@ -1,19 +1,24 @@
 import { useState } from "react";
 
 const StatisticLine = ({ value, text }) => {
-  return (<p>{text} {value}</p>)
+  return (
+    <tr>
+      <td>{text}</td>
+      <td> {value}</td>
+    </tr>)
 }
 
 const Statistics = ({ good, bad, neutral, total }) => {
   return (
     <div>
-      <StatisticLine text={"Good"} value={good} />
-      <StatisticLine text={"Neutral"} value={neutral} />
-      <StatisticLine text={"Bad"} value={bad} />
-      <StatisticLine text={"Total Feedbacks"} value={total} />
-      <StatisticLine text={"Avarage"} value={(good - bad) / (total)} />
-      <StatisticLine text={"Positive %"} value={(good) / total * 100} />
-
+      <table>
+        <StatisticLine text={"Good"} value={good} />
+        <StatisticLine text={"Neutral"} value={neutral} />
+        <StatisticLine text={"Bad"} value={bad} />
+        <StatisticLine text={"Total Feedbacks"} value={total} />
+        <StatisticLine text={"Avarage"} value={(good - bad) / (total)} />
+        <StatisticLine text={"Positive %"} value={(good) / total * 100} />
+      </table>
     </div>
   )
 }
@@ -50,7 +55,6 @@ const App = () => {
       <Button eventHandler={() => setBad(bad + 1)} text={"Bad"} />
       <h2>Statistics</h2>
       <Statistics good={good} bad={bad} neutral={neutral} total={total} />
-
     </div>
   )
 }
