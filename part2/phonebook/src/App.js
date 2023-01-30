@@ -1,16 +1,10 @@
 import './App.css';
-
+import Note from './components/Note';
 import React from 'react'
 
 
-const Note = ({ note }) => {
-  return (
-    <li>{note}</li>
-  )
-}
-
-
 const App = ({ notes }) => {
+  console.log(notes);
 
   return (
     <div>
