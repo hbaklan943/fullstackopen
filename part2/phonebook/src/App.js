@@ -48,6 +48,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <h2>Search</h2>
       <Filter value={searchInput} onChange={handleSearch} />
 
       <h2>Add a new</h2>
