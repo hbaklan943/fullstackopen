@@ -22,8 +22,16 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (persons.find((person) => (person.name === newPerson.name || person.number === newPerson.number))) {
-      alert(`${newPerson.name} Already in list`);
+    if (persons.find((person) => (person.name === newPerson.name && person.number !== newPerson.number))) {
+      if (window.confirm(`${newPerson.name} Already in list, would you like to replace the number `)) {
+        const person = persons.find(p => p.name === newPerson.name)
+        axios
+          .put(`http://localhost:3001/persons/${person.id}`, newPerson)
+          .then(response => {
+            console.log(response.data);
+            setPersons(persons.map(p => p.name === newPerson.name ? newPerson : p))
+          })
+      }
     }
     else if (newPerson.name === '' || newPerson.number === '') alert("Empty entry")
     else {
