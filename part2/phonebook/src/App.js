@@ -9,7 +9,7 @@ import axios from 'axios'
 const App = () => {
 
   const [persons, setPersons] = useState([])
-  const [newPerson, setNewPerson] = useState({ name: '', number: '' })
+  const [newPerson, setNewPerson] = useState({ name: '', number: '', id: 0 })
   const [searchInput, setSearchInput] = useState('')
 
   useEffect(() => {
@@ -22,18 +22,21 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (persons.find((person) => (person.name === newPerson.name && person.number !== newPerson.number))) {
+    if (persons.find((person) => (person.name === newPerson.name))) {
       if (window.confirm(`${newPerson.name} Already in list, would you like to replace the number `)) {
+
         const person = persons.find(p => p.name === newPerson.name)
-        axios
-          .put(`http://localhost:3001/persons/${person.id}`, newPerson)
+
+        personService
+          .replace(person.id, newPerson)
           .then(response => {
-            console.log(response.data);
             setPersons(persons.map(p => p.name === newPerson.name ? newPerson : p))
           })
       }
     }
+
     else if (newPerson.name === '' || newPerson.number === '') alert("Empty entry")
+
     else {
       personService
         .create(newPerson)
@@ -46,13 +49,13 @@ const App = () => {
 
   const handleNameChange = (event) => {
     setNewPerson(
-      { ...newPerson, name: event.target.value }
+      { ...newPerson, name: event.target.value, id: persons.length + 1 }
     )
   }
 
   const handleNumberChange = (event) => {
     setNewPerson(
-      { ...newPerson, number: event.target.value }
+      { ...newPerson, number: event.target.value, id: persons.length + 1 }
     )
   }
 
