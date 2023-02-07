@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Numbers from './components/Numbers'
 import PersonForm from './components/PersonForm'
+import personService from './services/numbers'
 import axios from 'axios'
 
 const App = () => {
@@ -11,25 +12,26 @@ const App = () => {
   const [newPerson, setNewPerson] = useState({ name: '', number: '' })
   const [searchInput, setSearchInput] = useState('')
 
-  const hook = () => {
-    axios
-      .get('http://localhost:3001/persons')
+  useEffect(() => {
+    personService
+      .getAll()
       .then((response) => {
-        setPersons(response.data)
+        setPersons(response)
       })
-  }
-
-  useEffect(hook, [])
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (persons.filter((person) => (person.name === newPerson.name || person.number === newPerson.number)).length) {
+    if (persons.find((person) => (person.name === newPerson.name || person.number === newPerson.number))) {
       alert(`${newPerson.name} Already in list`);
     }
     else if (newPerson.name === '' || newPerson.number === '') alert("Empty entry")
     else {
-      setPersons(persons.concat(newPerson)
-      )
+      personService
+        .create(newPerson)
+        .then(response => {
+          setPersons(persons.concat(response))
+        })
     }
     setNewPerson({ name: '', number: '' });
   }
@@ -50,6 +52,13 @@ const App = () => {
     setSearchInput(event.target.value)
   }
 
+  const deleteNumber = (id) => {
+    if (window.confirm('Are you sure you want to delete?')) {
+      personService.deleteData(id)
+        .then(() => setPersons(persons.filter(person => person.id !== id)))
+    }
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -60,7 +69,7 @@ const App = () => {
       <PersonForm onSubmit={handleSubmit} newPersonName={newPerson.name} newPersonNumber={newPerson.number} onNameChange={handleNameChange} onNumberChange={handleNumberChange} />
 
       <h2>Numbers:</h2>
-      <Numbers searchInput={searchInput} persons={persons} />
+      <Numbers searchInput={searchInput} persons={persons} deleteNumber={deleteNumber} />
 
     </div>
   )
