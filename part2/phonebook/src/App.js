@@ -3,20 +3,50 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Numbers from './components/Numbers'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 import personService from './services/numbers'
-import axios from 'axios'
 
 const App = () => {
 
   const [persons, setPersons] = useState([])
-  const [newPerson, setNewPerson] = useState({ name: '', number: '', id: 0 })
+  const [newPerson, setNewPerson] = useState({ name: '', number: '', id: null })
   const [searchInput, setSearchInput] = useState('')
+  const [notification, setNotification] = useState({ message: '', style: null })
+
+  const errorStyle = {
+    color: 'red',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  }
+  const addedStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  }
+  const editedStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  }
 
   useEffect(() => {
     personService
       .getAll()
       .then((response) => {
         setPersons(response)
+        console.log(response);
       })
   }, [])
 
@@ -26,11 +56,16 @@ const App = () => {
       if (window.confirm(`${newPerson.name} Already in list, would you like to replace the number `)) {
 
         const person = persons.find(p => p.name === newPerson.name)
+        person.number = newPerson.number;
+        console.log(person);
 
         personService
-          .replace(person.id, newPerson)
+          .replace(person.id, person)
           .then(response => {
-            setPersons(persons.map(p => p.name === newPerson.name ? newPerson : p))
+            setPersons(persons.map(p => p.name === newPerson.name ? person : p))
+            setNotification({ message: 'Number is succesfully changed', style: editedStyle })
+            setTimeout(() => setNotification({ message: '', style: null }), 3000)
+
           })
       }
     }
@@ -42,6 +77,8 @@ const App = () => {
         .create(newPerson)
         .then(response => {
           setPersons(persons.concat(response))
+          setNotification({ message: 'Number is added', style: addedStyle })
+          setTimeout(() => setNotification({ message: '', style: null }), 3000)
         })
     }
     setNewPerson({ name: '', number: '' });
@@ -49,13 +86,13 @@ const App = () => {
 
   const handleNameChange = (event) => {
     setNewPerson(
-      { ...newPerson, name: event.target.value, id: persons.length + 1 }
+      { ...newPerson, name: event.target.value }
     )
   }
 
   const handleNumberChange = (event) => {
     setNewPerson(
-      { ...newPerson, number: event.target.value, id: persons.length + 1 }
+      { ...newPerson, number: event.target.value }
     )
   }
 
@@ -72,6 +109,8 @@ const App = () => {
 
   return (
     <div>
+      <Notification notification={notification} />
+
       <h1>Phonebook</h1>
       <h2>Search</h2>
       <Filter value={searchInput} onChange={handleSearch} />
@@ -87,3 +126,5 @@ const App = () => {
 }
 
 export default App;
+
+
