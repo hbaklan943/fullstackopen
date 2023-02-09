@@ -64,7 +64,7 @@ const App = () => {
           .then(response => {
             setPersons(persons.map(p => p.name === newPerson.name ? person : p))
             setNotification({ message: 'Number is succesfully changed', style: editedStyle })
-            setTimeout(() => setNotification({ message: '', style: null }), 3000)
+            setTimeout(() => setNotification({ message: '', style: null }), 4000)
 
           })
       }
@@ -78,7 +78,7 @@ const App = () => {
         .then(response => {
           setPersons(persons.concat(response))
           setNotification({ message: 'Number is added', style: addedStyle })
-          setTimeout(() => setNotification({ message: '', style: null }), 3000)
+          setTimeout(() => setNotification({ message: '', style: null }), 4000)
         })
     }
     setNewPerson({ name: '', number: '' });
@@ -104,6 +104,10 @@ const App = () => {
     if (window.confirm('Are you sure you want to delete?')) {
       personService.deleteData(id)
         .then(() => setPersons(persons.filter(person => person.id !== id)))
+        .catch(error => {
+          setNotification({ message: 'Number is already deleted', style: errorStyle })
+          setTimeout(() => setNotification({ message: '', style: null }), 4000)
+        })
     }
   }
 
