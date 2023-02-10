@@ -27,29 +27,25 @@ function Singlecountry({ countries }) {
       setWeatherIconLink(`http:${response.data.current.condition.icon}`)
     })
 
-  //TODO condition not required
-  return countries.length === 1
-    ? (
+  return (
+    < ul >
+      <h2>{countries[0].name.common}</h2>
+      <h3>Capital: {countries[0].capital[0]}</h3>
+      <h3>Area: {countries[0].area}</h3>
+      <h3>Flag: </h3>
+      <img src={countries[0].flags.png} />
+      <h3>Languages:</h3>
       <ul>
-        <h2>{countries[0].name.common}</h2>
-        <h3>Capital: {countries[0].capital[0]}</h3>
-        <h3>Area: {countries[0].area}</h3>
-        <h3>Flag: </h3>
-        <img src={countries[0].flags.png} />
-        <h3>Languages:</h3>
-        <ul>
-          {Object.entries(countries[0].languages).map(entry => <li key={entry[1]}>{entry[1]}</li>)}
-        </ul>
-        <h3>Weather in {countries[0].capital[0]}: </h3>
-        <ul>
-          <li>temperature: {temperature}°C</li>
-          <img src={weatherIconLink} />
-          <li>wind: {wind} kph</li>
-        </ul>
-
+        {Object.entries(countries[0].languages).map(entry => <li key={entry[1]}>{entry[1]}</li>)}
       </ul>
-    )
-    : null
+      <h3>Weather in {countries[0].capital[0]}: </h3>
+      <ul>
+        <li>temperature: {temperature}°C</li>
+        <img src={weatherIconLink} />
+        <li>wind: {wind} kph</li>
+      </ul>
+    </ul >
+  )
 }
 
 
