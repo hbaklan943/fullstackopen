@@ -1,7 +1,19 @@
-const { request } = require('express')
+const { request, response } = require('express')
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 app.use(express.json())
+const requestLogger = (request, response, next) => {
+    console.log('Method: ', request.method)
+    console.log('Path: ', request.path)
+    console.log('Body: ', request.body)
+    console.log('---------');
+    next()
+}
+app.use(requestLogger)
+
+app.use(morgan('tiny'))
+
 let persons = [
     {
         "id": 1,
@@ -31,7 +43,7 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/api/info', (request, response) => {
     response.send(`
-    <h1>The phonebook has ${phonebook.length} people</h1>
+    <h1>The phonebook has ${persons.length} people</h1>
     <h1>${new Date()}</h1>    
     `)
 })
@@ -73,9 +85,14 @@ app.post('/api/persons', (request, response) => {
         "number": body.number
     }
     persons = persons.concat(newPerson)
-    console.log(persons);
     response.json(newPerson)
 })
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 app.listen(3001, () => {
     console.log("server is running");
