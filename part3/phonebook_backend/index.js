@@ -1,3 +1,4 @@
+const { request } = require('express')
 const express = require('express')
 const app = express()
 app.use(express.json())
@@ -26,6 +27,13 @@ const phonebook = [
 
 app.get('/api/persons', (request, response) => {
     response.json(phonebook)
+})
+
+app.get('/api/info', (request, response) => {
+    response.send(`
+    <h1>The phonebook has ${phonebook.length} people</h1>
+    <h1>${new Date()}</h1>    
+    `)
 })
 
 app.listen(3001, () => {
