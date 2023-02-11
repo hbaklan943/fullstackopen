@@ -74,8 +74,10 @@ function App() {
   }
 
 
+
   return (
     <div >
+      <h1>Search a country</h1>
       <input onChange={search} value={input} />
       {countries.length === 1
         ? <Singlecountry countries={countries} />
