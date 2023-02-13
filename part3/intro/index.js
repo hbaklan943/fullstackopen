@@ -1,6 +1,10 @@
 const express = require('express')
+const cors = require('cors')
 
 const app = express();
+
+app.use(express.static('build'))
+app.use(cors())
 app.use(express.json())
 
 let notes = [
@@ -62,7 +66,6 @@ app.post('/api/notes', (request, response) => {
 
     notes = notes.concat(note)
     response.json(note)
-    console.log(notes);
 })
 
 
@@ -70,11 +73,11 @@ app.get('/', (request, response) => {
     response.send('<h1>Hello world</h1>')
 })
 
-app.get('/notes', (request, response) => {
+app.get('/api/notes', (request, response) => {
     response.json(notes)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`);
