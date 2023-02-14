@@ -13,6 +13,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [successfulMessage, setSuccessfulMessage] = useState(null)
 
+
   useEffect(() => {
     noteService
       .getAll()
@@ -25,7 +26,6 @@ const App = () => {
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
-      id: notes.length + 1,
       content: newNote,
       important: Math.random < 0.5
     }
@@ -45,7 +45,6 @@ const App = () => {
 
 
   const handleNoteChange = (event) => {
-    console.log(event.target.value);
     setNewNote(event.target.value)
   }
 
@@ -86,7 +85,7 @@ const App = () => {
         {notesToShow.map(note =>
           <Note
             key={note.id}
-            note={note.content}
+            note={note}
             toggleImportance={() => { toggleImportanceOf(note.id) }}
           />
         )}
