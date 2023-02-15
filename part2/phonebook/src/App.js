@@ -67,6 +67,10 @@ const App = () => {
             setTimeout(() => setNotification({ message: '', style: null }), 4000)
 
           })
+          .catch(error => {
+            setNotification({ message: 'Name must be at least 3 characters', style: errorStyle })
+            setTimeout(() => setNotification({ message: '', style: null }), 4000)
+          })
       }
     }
 
@@ -78,6 +82,10 @@ const App = () => {
         .then(response => {
           setPersons(persons.concat(response))
           setNotification({ message: 'Number is added', style: addedStyle })
+          setTimeout(() => setNotification({ message: '', style: null }), 4000)
+        })
+        .catch(error => {
+          setNotification({ message: 'Name must be at least 3 characters', style: errorStyle })
           setTimeout(() => setNotification({ message: '', style: null }), 4000)
         })
     }

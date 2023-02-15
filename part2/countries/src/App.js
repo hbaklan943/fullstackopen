@@ -67,7 +67,6 @@ function App() {
             ? searchresult
             : []
         )
-        console.log(searchresult);
 
       })
       .catch(error => console.log(error))
@@ -79,6 +78,8 @@ function App() {
     <div >
       <h1>Search a country</h1>
       <input onChange={search} value={input} />
+
+
       {countries.length === 1
         ? <Singlecountry countries={countries} />
         : <Countrylist countries={countries} setCountries={setCountries} />
