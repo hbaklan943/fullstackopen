@@ -9,7 +9,8 @@ import personService from './services/numbers'
 const App = () => {
 
   const [persons, setPersons] = useState([])
-  const [newPerson, setNewPerson] = useState({ name: '', number: '', id: null })
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
   const [searchInput, setSearchInput] = useState('')
   const [notification, setNotification] = useState({ message: '', style: null })
 
@@ -46,37 +47,52 @@ const App = () => {
       .getAll()
       .then((response) => {
         setPersons(response)
-        console.log(response);
+        console.log('get all', response);
       })
   }, [])
 
   const handleSubmit = (event) => {
+    console.log('on submit', persons);
     event.preventDefault();
-    if (persons.find((person) => (person.name === newPerson.name))) {
-      if (window.confirm(`${newPerson.name} Already in list, would you like to replace the number `)) {
+    if (persons.find((person) => (person.name === newName))) {
+      console.log(persons);
+      if (window.confirm(`${newName} Already in list, would you like to replace the number `)) {
+        console.log(persons);
+        const personToBeChanged = persons.find(p => p.name === newName)
+        console.log(personToBeChanged);
 
-        const person = persons.find(p => p.name === newPerson.name)
-        person.number = newPerson.number;
-        console.log(person);
+        const newPerson = {
+          name: newName,
+          number: newNumber
+        }
+        console.log(newPerson);
 
         personService
-          .replace(person.id, person)
+          .replace(personToBeChanged.id, newPerson)
           .then(response => {
-            setPersons(persons.map(p => p.name === newPerson.name ? person : p))
+            console.log('inside then');
+            setPersons(persons.map(p => p.name !== newPerson.name ? p : response))
             setNotification({ message: 'Number is succesfully changed', style: editedStyle })
             setTimeout(() => setNotification({ message: '', style: null }), 4000)
-
           })
           .catch(error => {
-            setNotification({ message: 'Name must be at least 3 characters', style: errorStyle })
+            console.log('catched error');
+            console.log(persons);
+            setNotification({ message: 'Number format is not valid', style: errorStyle })
             setTimeout(() => setNotification({ message: '', style: null }), 4000)
           })
       }
     }
 
-    else if (newPerson.name === '' || newPerson.number === '') alert("Empty entry")
+    else if (newName === '' || newNumber === '') alert("Empty entry")
 
     else {
+      const newPerson = {
+        name: newName,
+        number: newNumber
+      }
+
+      console.log('in else');
       personService
         .create(newPerson)
         .then(response => {
@@ -89,19 +105,16 @@ const App = () => {
           setTimeout(() => setNotification({ message: '', style: null }), 4000)
         })
     }
-    setNewPerson({ name: '', number: '' });
+    setNewName('')
+    setNewNumber('')
   }
 
   const handleNameChange = (event) => {
-    setNewPerson(
-      { ...newPerson, name: event.target.value }
-    )
+    setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
-    setNewPerson(
-      { ...newPerson, number: event.target.value }
-    )
+    setNewNumber(event.target.value)
   }
 
   const handleSearch = (event) => {
@@ -128,7 +141,7 @@ const App = () => {
       <Filter value={searchInput} onChange={handleSearch} />
 
       <h2>Add a new</h2>
-      <PersonForm onSubmit={handleSubmit} newPersonName={newPerson.name} newPersonNumber={newPerson.number} onNameChange={handleNameChange} onNumberChange={handleNumberChange} />
+      <PersonForm onSubmit={handleSubmit} newPersonName={newName} newPersonNumber={newNumber} onNameChange={handleNameChange} onNumberChange={handleNumberChange} />
 
       <h2>Numbers:</h2>
       <Numbers searchInput={searchInput} persons={persons} deleteNumber={deleteNumber} />
