@@ -1,12 +1,9 @@
-# fly.toml file generated for flyio-fullstackopen-phonebook on 2023-02-13T17:28:40+03:00
+# fly.toml file generated for flyio-phonebook-fullstack on 2023-02-16T14:29:00+03:00
 
-app = "flyio-fullstackopen-phonebook"
+app = "flyio-phonebook-fullstack"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
-
-[build]
-  builder = "heroku/buildpacks:20"
 
 [env]
   PORT = "8080"

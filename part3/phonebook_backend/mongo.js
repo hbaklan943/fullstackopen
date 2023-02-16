@@ -1,14 +1,14 @@
 const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {
-    console.log('give password as an argument');
-    process.exit()
+  console.log('give password as an argument')
+  process.exit()
 }
 
 if (process.argv.length === 4) {
-    console.log(process.argv);
-    console.log('missing argument');
-    process.exit()
+  console.log(process.argv)
+  console.log('missing argument')
+  process.exit()
 }
 
 
@@ -21,41 +21,41 @@ mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
 const personSchema = mongoose.Schema({
-    name: String,
-    number: Number,
+  name: String,
+  number: Number,
 })
 
 const Person = mongoose.model('person', personSchema)
 
 const newPerson = new Person({
-    name: `${process.argv[3]}`,
-    number: `${process.argv[4]}`,
+  name: `${process.argv[3]}`,
+  number: `${process.argv[4]}`,
 })
 
 function logPeople() {
-    Person.find({}).then(result => {
-        console.log(result);
-        mongoose.connection.close()
-    })
+  Person.find({}).then(result => {
+    console.log(result)
+    mongoose.connection.close()
+  })
 }
 
 function saveNewPerson() {
-    newPerson.save().then((result) => {
-        console.log('person saved');
-        console.log(result);
-        mongoose.connection.close()
-    })
+  newPerson.save().then((result) => {
+    console.log('person saved')
+    console.log(result)
+    mongoose.connection.close()
+  })
 }
 
 
 
 if (process.argv.length === 3) {
-    console.log(process.argv);
-    logPeople()
+  console.log(process.argv)
+  logPeople()
 }
 
 if (process.argv.length === 5) {
-    console.log(process.argv);
-    saveNewPerson()
+  console.log(process.argv)
+  saveNewPerson()
 }
 
