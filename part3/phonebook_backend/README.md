@@ -1,1 +1,1 @@
-https://flyio-fullstackopen-phonebook.fly.dev/
+https://flyio-phonebook-fullstack.fly.dev/
