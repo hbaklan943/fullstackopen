@@ -15,7 +15,7 @@ const blogSchema = new mongoose.Schema({
 const Blog = mongoose.model('Blog', blogSchema)
 
 const mongoUrl = config.MONGODB_URI
-mongoose.set('strictQuery', true);
+
 mongoose.connect(mongoUrl)
   .then(() => {
     console.log('connected to mongodb');
