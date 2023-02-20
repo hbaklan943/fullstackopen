@@ -58,8 +58,8 @@ describe('favorite', () => {
 })
 
 
-describe('favorite author', () => {
-  test('should return favorite author', () => {
+describe('most blogs', () => {
+  test('should return author with most blogs', () => {
     const listWithBlogs = [
       {
         _id: '5a422aa71b54a676234d17f8',
@@ -73,11 +73,32 @@ describe('favorite author', () => {
         title: "Canonical string reduction",
         author: "Edsger W. Dijkstra",
         likes: 12
-      }]
+      },
+      {
+        title: "My title",
+        author: "Me",
+        likes: 32
+      },
+      {
+        title: "My title1",
+        author: "Me",
+        likes: 3
+      },
+      {
+        title: "My title2",
+        author: "Me",
+        likes: 12
+      },
+      {
+        title: "My title3",
+        author: "Me",
+        likes: 2
+      }
+    ]
 
 
-    const result = listHelper.favoriteAuthor(listWithBlogs)
-    expect(result).toEqual({ author: "Edsger W. Dijkstra", likes: 12 })
+    const result = listHelper.authorWithMostBlogs(listWithBlogs)
+    expect(result).toEqual({ author: "Me", numberOfBlogs: 4 })
   })
 })
 
