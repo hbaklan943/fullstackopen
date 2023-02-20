@@ -97,8 +97,51 @@ describe('most blogs', () => {
     ]
 
 
-    const result = listHelper.authorWithMostBlogs(listWithBlogs)
+    const result = listHelper.mostBlogs(listWithBlogs)
     expect(result).toEqual({ author: "Me", numberOfBlogs: 4 })
+  })
+})
+
+
+describe('most blogs', () => {
+  test('should return the athor with the most likes', () => {
+    const listWithBlogs = [
+      {
+        _id: '5a422aa71b54a676234d17f8',
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+        likes: 5,
+        __v: 0
+      },
+      {
+        title: "Canonical string reduction",
+        author: "Edsger W. Dijkstra",
+        likes: 12
+      },
+      {
+        title: "My title",
+        author: "Me",
+        likes: 32
+      },
+      {
+        title: "My title1",
+        author: "Me",
+        likes: 3
+      },
+      {
+        title: "My title2",
+        author: "Me",
+        likes: 12
+      },
+      {
+        title: "My title3",
+        author: "Me",
+        likes: 2
+      }
+    ]
+    const result = listHelper.mostLikes(listWithBlogs)
+    expect(result).toEqual({ author: "Me", likes: 49 })
   })
 })
 

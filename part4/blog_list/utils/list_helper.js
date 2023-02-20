@@ -19,7 +19,7 @@ const favoriteBlog = (blogs) => {
   }, { likes: 0 })
 }
 
-const authorWithMostBlogs = (blogs) => {
+const mostBlogs = (blogs) => {
 
   let authors = []
   if (blogs.length === 0) {
@@ -34,7 +34,6 @@ const authorWithMostBlogs = (blogs) => {
       }
     }
     accumulator.push({ author: currentBlog.author, numberOfBlogs: 1 })
-    console.log(accumulator);
     return accumulator
   }, [{ author: '', numberOfBlogs: 0 }])
 
@@ -46,10 +45,39 @@ const authorWithMostBlogs = (blogs) => {
   return authorWithMostBlogs
 }
 
+const mostLikes = (blogs) => {
+
+  let authors = []
+  if (blogs.length === 0) {
+    return {}
+  }
+  authors = blogs.reduce((accumulator, currentBlog) => {
+
+    for (let i = 0; i < accumulator.length; i++) {
+      if (currentBlog.author === accumulator[i].author) {
+        accumulator[i].likes = accumulator[i].likes + currentBlog.likes
+        return accumulator
+      }
+    }
+    accumulator.push({ author: currentBlog.author, likes: currentBlog.likes })
+
+    return accumulator
+  }, [{ author: '', likes: 0 }])
+
+
+  let authorWithMostLikes = authors[0]
+  console.log(authors);
+  for (let i = 1; i < authors.length; i++) {
+    authorWithMostLikes = authorWithMostLikes.likes > authors[i].likes ? authorWithMostLikes : authors[i]
+  }
+  return authorWithMostLikes
+}
+
 
 module.exports = {
   dummy,
   sumLikes,
   favoriteBlog,
-  authorWithMostBlogs
+  mostBlogs,
+  mostLikes
 }
