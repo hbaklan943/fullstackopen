@@ -13,7 +13,13 @@ blogsRouter.get('/', (request, response) => {
 blogsRouter.post('/', (request, response) => {
   const blog = new Blog(request.body)
 
-
+  if (!blog.title || !blog.url) {
+    return response.status(400).end()
+  }
+  if (!blog.likes) {
+    blog.likes = 0
+    console.log('like count is undefined so added 0');
+  }
   blog
     .save()
     .then(result => {

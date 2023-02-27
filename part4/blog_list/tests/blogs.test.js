@@ -16,26 +16,50 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
+describe('blog with missing title or url properties', () => {
+  test('should respond with 400 bad request', async () => {
+    const blogWithMissingTitle = {
+      author: "new author",
+      url: "www.example.com",
+    }
+    await api
+      .post('/api/blogs')
+      .send(blogWithMissingTitle)
+      .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('should respond with 400 bad request', async () => {
+    const blogWithMissingUrl = {
+      title: 'new title',
+      author: "new author",
+    }
+    await api
+      .post('/api/blogs')
+      .send(blogWithMissingUrl)
+      .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+})
+
 describe('blog without likes count', () => {
   test('should add likes count of zero', async () => {
-    const blogToPost = {
+    const blogWithoutLikes = {
       title: "new blog",
       author: "new author",
       url: "www.example.com",
     }
-    if (!blogToPost.likes) {
-      blogToPost.likes = 0
-      console.log('like count is undefined so added 0');
-    }
     await api
       .post('/api/blogs')
-      .send(blogToPost)
+      .send(blogWithoutLikes)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    console.log(await helper.blogsInDb());
     const blogsAtEnd = await helper.blogsInDb()
-    console.log(blogsAtEnd[blogsAtEnd.length - 1]);
     expect(blogsAtEnd[blogsAtEnd.length - 1].likes).toBe(0)
   })
 })
