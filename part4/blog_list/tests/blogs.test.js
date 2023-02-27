@@ -4,6 +4,37 @@ const listHelper = require('../utils/list_helper')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
+const helper = require('./test_helper')
+const Blog = require('../models/blog')
+
+beforeEach(async () => {
+  await Blog.deleteMany({})
+  console.log('cleared')
+
+  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+  const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
+})
+
+
+describe('successfull post request', () => {
+  test('successfull post request', async () => {
+    const blogToPost = {
+      title: "new blog",
+      author: "new author",
+      url: "www.example.com",
+      likes: 92
+    }
+    await api
+      .post('/api/blogs')
+      .send(blogToPost)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    expect(await helper.blogsInDb()).toHaveLength(helper.initialBlogs.length + 1)
+
+  })
+})
 
 describe('unique identifier property of the blog posts is named id', () => {
   test('if id property is defined', async () => {
@@ -13,7 +44,6 @@ describe('unique identifier property of the blog posts is named id', () => {
       .expect('Content-Type', /application\/json/)
 
 
-    console.log(blogs.body)
     blogs.body.forEach(blog => {
       expect(blog.id).toBeDefined()
     })
