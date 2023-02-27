@@ -16,6 +16,29 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
+describe('blog without likes count', () => {
+  test('should add likes count of zero', async () => {
+    const blogToPost = {
+      title: "new blog",
+      author: "new author",
+      url: "www.example.com",
+    }
+    if (!blogToPost.likes) {
+      blogToPost.likes = 0
+      console.log('like count is undefined so added 0');
+    }
+    await api
+      .post('/api/blogs')
+      .send(blogToPost)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    console.log(await helper.blogsInDb());
+    const blogsAtEnd = await helper.blogsInDb()
+    console.log(blogsAtEnd[blogsAtEnd.length - 1]);
+    expect(blogsAtEnd[blogsAtEnd.length - 1].likes).toBe(0)
+  })
+})
 
 describe('successfull post request', () => {
   test('successfull post request', async () => {
