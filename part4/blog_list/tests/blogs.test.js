@@ -16,7 +16,26 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-describe('blog with missing title or url properties', () => {
+describe('delete requests', () => {
+  test('should respond with 204', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+    console.log(blogToDelete);
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd.length).toBe(blogsAtStart.length - 1)
+
+    const ids = blogsAtEnd.map(blog => blog.id)
+    expect(ids).not.toContain(blogToDelete.id)
+
+  })
+})
+
+describe('posting blog with missing title or url properties', () => {
   test('should respond with 400 bad request', async () => {
     const blogWithMissingTitle = {
       author: "new author",
@@ -46,8 +65,8 @@ describe('blog with missing title or url properties', () => {
   })
 })
 
-describe('blog without likes count', () => {
-  test('should add likes count of zero', async () => {
+describe('posting blog without likes count', () => {
+  test('should have like count of 0', async () => {
     const blogWithoutLikes = {
       title: "new blog",
       author: "new author",
