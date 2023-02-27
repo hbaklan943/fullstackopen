@@ -1,6 +1,34 @@
+const mongoose = require('mongoose')
 const { describe } = require('node:test')
 const listHelper = require('../utils/list_helper')
+const supertest = require('supertest')
+const app = require('../app')
+const api = supertest(app)
 
+describe('unique identifier property of the blog posts is named id', () => {
+  test('if id property is defined', async () => {
+    const blogs = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+
+    console.log(blogs.body)
+    blogs.body.forEach(blog => {
+      expect(blog.id).toBeDefined()
+    })
+
+  })
+})
+
+describe('supertest get request', () => {
+  test('supertest get req test', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+})
 
 describe('dummy', () => {
   test('dummy returns one', () => {
@@ -145,3 +173,6 @@ describe('most blogs', () => {
   })
 })
 
+afterAll(async () => {
+  await mongoose.connection.close()
+})
