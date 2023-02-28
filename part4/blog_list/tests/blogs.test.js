@@ -16,6 +16,18 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
+describe('put resuests', () => {
+  test('should return with ', () => {
+
+  })
+})
+
+describe('put requests', () => {
+  test('should respond with 204', async () => {
+
+  })
+})
+
 describe('delete requests', () => {
   test('should respond with 204', async () => {
     const blogsAtStart = await helper.blogsInDb()
