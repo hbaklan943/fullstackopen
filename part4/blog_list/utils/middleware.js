@@ -38,10 +38,11 @@ const tokenExtractor = (request, response, next) => {
     if (authorization && authorization.startsWith('Bearer ')) {
       return authorization.replace('Bearer ', '')
     }
-    return null
+    return response.status(401).json({ error: "token invalid" })
   }
 
   request.token = getTokenFrom(request)
+  console.log('extracted token:', request.token);
   next()
 }
 
@@ -51,6 +52,8 @@ const userExtractor = async (request, response, next) => {
     return response.status(401).json({ error: "token invalid" })
   }
   request.user = await User.findById(decodedToken.id)
+  console.log('decoded token: ', decodedToken);
+  console.log('extracted user:', request.user);
   next()
 }
 

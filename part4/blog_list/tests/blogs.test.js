@@ -16,26 +16,15 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-describe('put resuests', () => {
-  test('should return with ', () => {
-
-  })
-})
-
-describe('put requests', () => {
-  test('should respond with 204', async () => {
-
-  })
-})
-
 describe('delete requests', () => {
-  test('should respond with 204', async () => {
+  test('should respond with 204 no content', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
     console.log(blogToDelete);
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhhcnVuIiwiaWQiOiI2NDAwZDkwMWRlNTNmZDE4ZmU0NWU0NjUiLCJpYXQiOjE2Nzc3NzcxODAsImV4cCI6MTY3Nzc4MDc4MH0.vxdUnCQ_KKyrScU7uurZueRxlN0b33GtvKAxGZThzzI')
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
@@ -86,6 +75,7 @@ describe('posting blog without likes count', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhhcnVuIiwiaWQiOiI2NDAwZDkwMWRlNTNmZDE4ZmU0NWU0NjUiLCJpYXQiOjE2Nzc3NzcxODAsImV4cCI6MTY3Nzc4MDc4MH0.vxdUnCQ_KKyrScU7uurZueRxlN0b33GtvKAxGZThzzI')
       .send(blogWithoutLikes)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -105,11 +95,32 @@ describe('successfull post request', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhhcnVuIiwiaWQiOiI2NDAwZDkwMWRlNTNmZDE4ZmU0NWU0NjUiLCJpYXQiOjE2Nzc3NzcxODAsImV4cCI6MTY3Nzc4MDc4MH0.vxdUnCQ_KKyrScU7uurZueRxlN0b33GtvKAxGZThzzI')
       .send(blogToPost)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     expect(await helper.blogsInDb()).toHaveLength(helper.initialBlogs.length + 1)
+
+  })
+})
+
+describe('posting a new blog with missing token', () => {
+  test('should be responded with 401 Unauthorized', async () => {
+    const blogToPost = {
+      title: "new blog",
+      author: "new author",
+      url: "www.example.com",
+      likes: 92
+    }
+    await api
+      .post('/api/blogs')
+      .set('Authorization', '')
+      .send(blogToPost)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+    expect(await helper.blogsInDb()).toHaveLength(helper.initialBlogs.length)
 
   })
 })
@@ -137,7 +148,6 @@ describe('supertest get request', () => {
       .expect('Content-Type', /application\/json/)
   })
 })
-
 describe('dummy', () => {
   test('dummy returns one', () => {
     const blogs = []
