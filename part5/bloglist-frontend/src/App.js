@@ -15,16 +15,22 @@ const App = () => {
     )
   }, [])
 
+  useEffect(() => {
+    const user = JSON.parse(window.localStorage.getItem('loggedBlogAppUser'))
+    setUser(user)
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
       blogService.setToken(user.token)
       setUser(user)
-
+      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       console.log(user);
     } catch (error) {
 
+      console.log('Invalid username or password');
     }
 
   }
@@ -49,7 +55,11 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
-        <p>logged in as {username}</p>
+        logged in as {username}
+        <button onClick={() => {
+          setUser(null)
+          window.localStorage.removeItem('loggedBlogAppUser')
+        }}>Log out</button>
         {
           blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
