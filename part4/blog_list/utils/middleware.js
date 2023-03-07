@@ -34,6 +34,7 @@ const errorHandler = (error, request, response, next) => {
 
 const tokenExtractor = (request, response, next) => {
   const getTokenFrom = request => {
+    console.log('extracting token ...');
     const authorization = request.get('authorization')
     if (authorization && authorization.startsWith('Bearer ')) {
       return authorization.replace('Bearer ', '')
@@ -42,7 +43,6 @@ const tokenExtractor = (request, response, next) => {
   }
 
   request.token = getTokenFrom(request)
-  console.log('extracted token:', request.token);
   next()
 }
 

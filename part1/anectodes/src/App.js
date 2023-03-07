@@ -1,6 +1,9 @@
 import { useState } from "react";
 
+
+
 const App = () => {
+
   const anectodes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
