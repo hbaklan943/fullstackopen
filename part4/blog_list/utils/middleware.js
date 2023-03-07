@@ -36,7 +36,9 @@ const tokenExtractor = (request, response, next) => {
   const getTokenFrom = request => {
     console.log('extracting token ...');
     const authorization = request.get('authorization')
+    console.log('auth is :', authorization);
     if (authorization && authorization.startsWith('Bearer ')) {
+      console.log(authorization);
       return authorization.replace('Bearer ', '')
     }
     return response.status(401).json({ error: "token invalid" })

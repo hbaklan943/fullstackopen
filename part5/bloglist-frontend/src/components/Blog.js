@@ -1,7 +1,8 @@
-const Blog = ({blog}) => (
+const Blog = ({ blog }) => (
   <div>
+    {console.log(blog)}
     {blog.title} {blog.author}
-  </div>  
+  </div>
 )
 
 export default Blog

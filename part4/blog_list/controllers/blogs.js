@@ -10,7 +10,7 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
   console.log('posting blog with body of:', request.body);
   const body = request.body
   const user = request.user
