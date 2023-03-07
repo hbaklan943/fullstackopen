@@ -10,14 +10,12 @@ let token = null
 
 const setToken = (newToken) => {
   token = `Bearer ${newToken}`
-  console.log('token value is:', token);
 }
 
 const create = async (newBlog) => {
   const config = {
     headers: { Authorization: token }
   }
-  console.log('config is: ', config);
   const response = await axios.post(baseUrl, newBlog, config)
   return response.data
 }

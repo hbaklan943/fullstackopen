@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -11,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [notification, setNotification] = useState({ message: '', style: null })
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -19,26 +21,40 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const user = JSON.parse(window.localStorage.getItem('loggedBlogAppUser'))
-    setUser(user)
-    blogService.setToken(user.token)
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
   }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
-      console.log('user token is', user.token);
       blogService.setToken(user.token)
       setUser(user)
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
-      console.log(user);
+      setNotification({
+        message: `Successful login`,
+        style: 'positive'
+      })
+      setTimeout(() => {
+        setNotification({ message: '', style: null })
+      }, 5000);
     } catch (error) {
-      console.log('Invalid username or password');
+      setNotification({
+        message: `Invalid username or password`,
+        style: 'negative'
+      })
+      setTimeout(() => {
+        setNotification({ message: '', style: null })
+      }, 5000);
     }
   }
 
-  const handleNewForm = async (event) => {
+  const handleNewBlog = async (event) => {
     event.preventDefault()
     const newBlog = {
       title,
@@ -48,8 +64,21 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(returnedBlog))
+      setNotification({
+        message: `A new blog ${newBlog.title} by ${newBlog.author} has been added`,
+        style: 'positive'
+      })
+      setTimeout(() => {
+        setNotification({ message: '', style: null })
+      }, 5000);
     } catch (error) {
-      console.log(error)
+      setNotification({
+        message: `Invalid blog`,
+        style: 'negative'
+      })
+      setTimeout(() => {
+        setNotification({ message: '', style: null })
+      }, 5000);
     }
 
   }
@@ -91,7 +120,7 @@ const App = () => {
 
   const newBlogForm = () => {
     return (
-      <form onSubmit={handleNewForm}>
+      <form onSubmit={handleNewBlog}>
         <h2>Add New Blog</h2>
         <div>Title:
           <input type='text' name='Title' value={title} onChange={({ target }) => { setTitle(target.value) }}></input>
@@ -109,6 +138,10 @@ const App = () => {
 
   return (
     <div>
+      {notification.message !== ''
+        ? <Notification notification={notification} />
+        : false}
+
       {!user && loginForm()}
       {user && blogsComponent()}
       {user && newBlogForm()}
