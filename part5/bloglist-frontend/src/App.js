@@ -8,16 +8,15 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUserName] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
   const [notification, setNotification] = useState({ message: '', style: null })
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
       setBlogs(blogs)
-    )
+    })
   }, [])
 
   useEffect(() => {
@@ -57,6 +56,7 @@ const App = () => {
   const createNewBlog = async (newBlog) => {
     try {
       const returnedBlog = await blogService.create(newBlog)
+      returnedBlog.user = { username: user.username }
       setBlogs(blogs.concat(returnedBlog))
       setNotification({
         message: `A new blog ${newBlog.title} by ${newBlog.author} has been added`,
@@ -82,7 +82,7 @@ const App = () => {
       <form onSubmit={handleLogin}>
         <div>
           Username:
-          <input type='text' name='Username' value={username} onChange={({ target }) => { setUserName(target.value) }}></input>
+          <input type='text' name='Username' value={username} onChange={({ target }) => { setUsername(target.value) }}></input>
         </div>
         <div>
           Password:
