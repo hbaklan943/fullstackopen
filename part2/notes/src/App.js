@@ -1,14 +1,14 @@
-import './index.css';
+import './index.css'
 import React from 'react'
-import Note from './components/Note';
+import Note from './components/Note'
 import Notification from './components/Notification'
 import { useState, useEffect, useRef } from 'react'
 import noteService from './services/notes'
 import loginService from './services/login'
-import Footer from './components/Footer';
-import LoginForm from './components/LoginForm';
-import NoteForm from './components/NoteForm';
-import Tooglable from './components/Tooglable';
+import Footer from './components/Footer'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
+import Tooglable from './components/Tooglable'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -47,7 +47,7 @@ const App = () => {
       .create(noteObject)
       .then((returnedNote) => {
         noteFormRef.current.toggleVisibility()
-        console.log(returnedNote);
+        console.log(returnedNote)
         setNotes(notes.concat(returnedNote))
         setSuccessfulMessage(`added ${returnedNote.content}`)
         setTimeout(() => {
@@ -72,6 +72,7 @@ const App = () => {
         setNotes(notes.map(n => n.id !== id ? n : returnedNote))
       })
       .catch(error => {
+        console.log(error)
         setErrorMessage(
           `Note '${note.content}' was already removed from server`
         )
@@ -89,7 +90,7 @@ const App = () => {
       const user = await loginService.login({ username, password })
       setUser(user)
       window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(user))
-      console.log(window.localStorage.getItem('loggedNoteAppUser'));
+      console.log(window.localStorage.getItem('loggedNoteAppUser'))
       noteService.setToken(user.token)
       setUsername('')
       setPassword('')
@@ -97,7 +98,7 @@ const App = () => {
       setErrorMessage('Wrong Credentials')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000);
+      }, 5000)
     }
   }
 
@@ -160,4 +161,4 @@ const App = () => {
     </div>
   )
 }
-export default App;
+export default App
