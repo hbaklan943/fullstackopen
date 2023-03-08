@@ -23,7 +23,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
-      console.log(blogs);
+      console.log(blogs)
       sort(blogs)
     })
   }, [])
@@ -45,20 +45,20 @@ const App = () => {
       setUser(user)
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       setNotification({
-        message: `Successful login`,
+        message: 'Successful login',
         style: 'positive'
       })
       setTimeout(() => {
         setNotification({ message: '', style: null })
-      }, 5000);
+      }, 5000)
     } catch (error) {
       setNotification({
-        message: `Invalid username or password`,
+        message: 'Invalid username or password',
         style: 'negative'
       })
       setTimeout(() => {
         setNotification({ message: '', style: null })
-      }, 5000);
+      }, 5000)
     }
   }
 
@@ -73,15 +73,15 @@ const App = () => {
       })
       setTimeout(() => {
         setNotification({ message: '', style: null })
-      }, 5000);
+      }, 5000)
     } catch (error) {
       setNotification({
-        message: `Invalid blog`,
+        message: 'Invalid blog',
         style: 'negative'
       })
       setTimeout(() => {
         setNotification({ message: '', style: null })
-      }, 5000);
+      }, 5000)
     }
 
   }

@@ -1,6 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-export default function Notification({ notification }) {
+const Notification = ({ notification }) => {
 
   const negativeStyle = {
     color: 'red',
@@ -21,10 +22,15 @@ export default function Notification({ notification }) {
     marginBottom: 10,
   }
 
-
   return (
     <div style={notification.style === 'positive' ? positiveStyle : negativeStyle}>
       {notification.message}
     </div>
   )
 }
+
+Notification.propTypes = {
+  notification: PropTypes.object.isRequired
+}
+
+export default Notification

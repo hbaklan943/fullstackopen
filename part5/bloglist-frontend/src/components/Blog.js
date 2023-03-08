@@ -1,19 +1,19 @@
-import { useState } from "react"
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog, blogs, setBlogs, sort, user }) => {
   const [detailsVisibility, setDetailsVisibility] = useState(false)
   const styleBlog = {
-    "padding": 8,
-    "margin": 5,
-    "border": "solid ",
-    "borderWidth": 1,
+    'padding': 8,
+    'margin': 5,
+    'border': 'solid ',
+    'borderWidth': 1,
   }
   const styleDetails = { display: detailsVisibility ? '' : 'none' }
   const styleNone = { display: 'none' }
 
   const increaseLikes = async (blog) => {
-    console.log(blog);
+    console.log(blog)
     const blogObject = {
       _id: blog.id,
       user: {
@@ -37,7 +37,7 @@ const Blog = ({ blog, blogs, setBlogs, sort, user }) => {
       await blogService.update(blog.id, blogObject)
       sort(blogs)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -48,7 +48,7 @@ const Blog = ({ blog, blogs, setBlogs, sort, user }) => {
       newBlogs.splice(blogs.indexOf(blog), 1)
       setBlogs(newBlogs)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
 
   }
