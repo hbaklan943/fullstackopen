@@ -1,7 +1,7 @@
 import { useState } from "react"
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, blogs, setBlogs, sort }) => {
+const Blog = ({ blog, blogs, setBlogs, sort, user }) => {
   const [detailsVisibility, setDetailsVisibility] = useState(false)
   const styleBlog = {
     "padding": 8,
@@ -10,6 +10,7 @@ const Blog = ({ blog, blogs, setBlogs, sort }) => {
     "borderWidth": 1,
   }
   const styleDetails = { display: detailsVisibility ? '' : 'none' }
+  const styleNone = { display: 'none' }
 
   const increaseLikes = async (blog) => {
     console.log(blog);
@@ -40,6 +41,18 @@ const Blog = ({ blog, blogs, setBlogs, sort }) => {
     }
   }
 
+  const removeBlog = async (blog) => {
+    try {
+      await blogService.remove(blog.id)
+      const newBlogs = [...blogs]
+      newBlogs.splice(blogs.indexOf(blog), 1)
+      setBlogs(newBlogs)
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
 
 
   return (
@@ -52,7 +65,15 @@ const Blog = ({ blog, blogs, setBlogs, sort }) => {
         <div>Url: {blog.url}</div>
         <div>Likes: {blog.likes} <button onClick={() => { increaseLikes(blog) }}>like</button></div>
         {blog.user.username}
+        <div style={user.id !== blog.user.id ? styleNone : null}>
+          <button onClick={() => {
+            window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)
+              ? removeBlog(blog)
+              : console.log('not confirmed')
+          }}>remove</button>
+        </div>
       </div>
+
 
     </div >
   )

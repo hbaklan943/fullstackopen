@@ -23,8 +23,8 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
-      sort(blogs)
       console.log(blogs);
+      sort(blogs)
     })
   }, [])
 
@@ -100,7 +100,7 @@ const App = () => {
         <h2>Blogs</h2>
         {
           blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} sort={sort} />
+            <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} sort={sort} user={user} />
           )
         }
       </div>
