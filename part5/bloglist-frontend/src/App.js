@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import Notification from './components/Notification'
 import NewBlogFrom from './components/NewBlogFrom'
 import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -13,9 +14,17 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState({ message: '', style: null })
 
+  const sort = (blogs) => {
+    const sortedBlogs = blogs.sort((a, b) => {
+      return b.likes - a.likes
+    })
+    setBlogs(sortedBlogs)
+  }
+
   useEffect(() => {
     blogService.getAll().then(blogs => {
-      setBlogs(blogs)
+      sort(blogs)
+      console.log(blogs);
     })
   }, [])
 
@@ -56,7 +65,7 @@ const App = () => {
   const createNewBlog = async (newBlog) => {
     try {
       const returnedBlog = await blogService.create(newBlog)
-      returnedBlog.user = { username: user.username }
+      returnedBlog.user = { username: user.username, id: user.id }
       setBlogs(blogs.concat(returnedBlog))
       setNotification({
         message: `A new blog ${newBlog.title} by ${newBlog.author} has been added`,
@@ -77,21 +86,7 @@ const App = () => {
 
   }
 
-  const loginForm = () => {
-    return (
-      <form onSubmit={handleLogin}>
-        <div>
-          Username:
-          <input type='text' name='Username' value={username} onChange={({ target }) => { setUsername(target.value) }}></input>
-        </div>
-        <div>
-          Password:
-          <input type='password' name='Password' value={password} onChange={({ target }) => { setPassword(target.value) }}></input>
-        </div>
-        <button type='submit'>Login</button>
-      </form>
-    )
-  }
+
 
   const blogsComponent = () => {
     return (
@@ -105,12 +100,13 @@ const App = () => {
         <h2>Blogs</h2>
         {
           blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} sort={sort} />
           )
         }
       </div>
     )
   }
+
 
 
 
@@ -120,7 +116,13 @@ const App = () => {
         ? <Notification notification={notification} />
         : false}
 
-      {!user && loginForm()}
+      {!user && <LoginForm
+        username={username}
+        password={password}
+        handleUsernameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        handleLogin={handleLogin}
+      />}
       {user && blogsComponent()}
       {user && <Togglable buttonLabel='New Note'>
         <NewBlogFrom createNewBlog={createNewBlog} />
