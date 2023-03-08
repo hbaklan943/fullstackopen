@@ -2,20 +2,25 @@ import './index.css';
 import React from 'react'
 import Note from './components/Note';
 import Notification from './components/Notification'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import noteService from './services/notes'
 import loginService from './services/login'
 import Footer from './components/Footer';
+import LoginForm from './components/LoginForm';
+import NoteForm from './components/NoteForm';
+import Tooglable from './components/Tooglable';
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('a new note... ')
+
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [successfulMessage, setSuccessfulMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
+  const noteFormRef = useRef()
 
 
   useEffect(() => {
@@ -37,30 +42,21 @@ const App = () => {
 
 
 
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random < 0.5
-    }
-
+  const createNote = (noteObject) => {
     noteService
       .create(noteObject)
       .then((returnedNote) => {
+        noteFormRef.current.toggleVisibility()
         console.log(returnedNote);
         setNotes(notes.concat(returnedNote))
         setSuccessfulMessage(`added ${returnedNote.content}`)
         setTimeout(() => {
           setSuccessfulMessage(null)
         }, 3000)
-        setNewNote('')
       })
   }
 
 
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value)
-  }
 
   const notesToShow = showAll
     ? notes
@@ -105,36 +101,29 @@ const App = () => {
     }
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type='text'
-          value={username}
-          name='Username'
-          onChange={({ target }) => { setUsername(target.value) }}
-        ></input>
-      </div>
-      <div>
-        password
-        <input
-          type='password'
-          value={password}
-          name='Password'
-          onChange={({ target }) => { setPassword(target.value) }}
-        ></input>
-      </div>
-      <button type='submit'>Login</button>
-    </form>
-  )
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
-  const notesForm = () => (
-    <form onSubmit={addNote}>
-      <input value={newNote} onChange={handleNoteChange} />
-      <button type='submit'>save</button>
-    </form>
-  )
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleLogin={handleLogin}
+          />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
+
 
   return (
     <div>
@@ -144,7 +133,12 @@ const App = () => {
       {!user && loginForm()}
       {user && <div>
         <p>Logged in as {user.username}</p>
-        {notesForm()}
+        <Tooglable buttonLabel='New Note' ref={noteFormRef}>
+          <NoteForm
+            createNote={createNote}
+          />
+        </Tooglable>
+
       </div>}
 
       <div>

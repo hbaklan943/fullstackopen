@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import NewBlogFrom from './components/NewBlogFrom'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -9,9 +11,7 @@ const App = () => {
   const [username, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+
   const [notification, setNotification] = useState({ message: '', style: null })
 
   useEffect(() => {
@@ -54,13 +54,7 @@ const App = () => {
     }
   }
 
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
-    const newBlog = {
-      title,
-      author,
-      url,
-    }
+  const createNewBlog = async (newBlog) => {
     try {
       const returnedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(returnedBlog))
@@ -118,23 +112,7 @@ const App = () => {
     )
   }
 
-  const newBlogForm = () => {
-    return (
-      <form onSubmit={handleNewBlog}>
-        <h2>Add New Blog</h2>
-        <div>Title:
-          <input type='text' name='Title' value={title} onChange={({ target }) => { setTitle(target.value) }}></input>
-        </div>
-        <div>Author:
-          <input type='text' name='Author' value={author} onChange={({ target }) => { setAuthor(target.value) }}></input>
-        </div>
-        <div>Url:
-          <input type='text' name='Url' value={url} onChange={({ target }) => { setUrl(target.value) }}></input>
-        </div>
-        <button type='submit'>Create</button>
-      </form>
-    )
-  }
+
 
   return (
     <div>
@@ -144,7 +122,10 @@ const App = () => {
 
       {!user && loginForm()}
       {user && blogsComponent()}
-      {user && newBlogForm()}
+      {user && <Togglable buttonLabel='New Note'>
+        <NewBlogFrom createNewBlog={createNewBlog} />
+      </Togglable>
+      }
     </div>
   )
 }
