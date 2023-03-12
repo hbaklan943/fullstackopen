@@ -8,7 +8,7 @@ const Blog = ({ blog, user, increaseLikes, removeBlog }) => {
     'border': 'solid ',
     'borderWidth': 1,
   }
-  const styleDetails = { display: detailsVisibility ? '' : 'none' }
+  const styleDetails = { display: detailsVisibility ? 'block' : 'none' }
   const styleNone = { display: 'none' }
 
 
@@ -16,13 +16,13 @@ const Blog = ({ blog, user, increaseLikes, removeBlog }) => {
     <div style={styleBlog}>
       <div className='minimizedBlog'>
         {blog.title} {blog.author}
-        <button onClick={() => { setDetailsVisibility(!detailsVisibility) }}>{detailsVisibility ? 'Hide Details' : 'Show Details'}</button>
+        <button className='toggleVisibility' onClick={() => { setDetailsVisibility(!detailsVisibility) }}>{detailsVisibility ? 'Hide Details' : 'Show Details'}</button>
       </div>
 
 
       <div style={styleDetails} className='details'>
         <div>Url: {blog.url}</div>
-        <div>Likes: {blog.likes} <button onClick={() => { increaseLikes(blog) }}>like</button></div>
+        <div>Likes: {blog.likes} <button className='likeButton' onClick={() => { increaseLikes(blog) }}>like</button></div>
         {blog.user.username}
         <div style={user.username !== blog.user.username ? styleNone : null}>
           <button onClick={() => {
