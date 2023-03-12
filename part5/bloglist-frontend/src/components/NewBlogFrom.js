@@ -1,9 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 
-export default function NewBlogFrom({
-  createNewBlog
-}) {
+export default function NewBlogFrom({ createNewBlog }) {
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -36,7 +34,7 @@ export default function NewBlogFrom({
       <div>Url:
         <input type='text' name='Url' value={url} onChange={({ target }) => { setUrl(target.value) }}></input>
       </div>
-      <button type='submit'>Create</button>
+      <button className='submitButton' type='submit'>Create</button>
     </form>
   )
 }
