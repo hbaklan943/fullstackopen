@@ -100,11 +100,51 @@ const App = () => {
         <h2>Blogs</h2>
         {
           blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} sort={sort} user={user} />
+            <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} sort={sort} user={user} increaseLikes={increaseLikes} removeBlog={removeBlog} />
           )
         }
       </div>
     )
+  }
+  const increaseLikes = async (blog) => {
+    console.log(blog)
+    const blogObject = {
+      _id: blog.id,
+      user: {
+        _id: blog.user.id,
+        username: blog.user.username,
+      },
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    }
+    setBlogs(blogs.map((b) => {
+      if (b.id === blog.id) {
+        blog.likes++
+        return blog
+      }
+      else return b
+    }))
+
+    try {
+      await blogService.update(blog.id, blogObject)
+      sort(blogs)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const removeBlog = async (blog) => {
+    try {
+      await blogService.remove(blog.id)
+      const newBlogs = [...blogs]
+      newBlogs.splice(blogs.indexOf(blog), 1)
+      setBlogs(newBlogs)
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
 
