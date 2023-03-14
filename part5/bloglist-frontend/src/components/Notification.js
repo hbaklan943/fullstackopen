@@ -23,7 +23,7 @@ const Notification = ({ notification }) => {
   }
 
   return (
-    <div style={notification.style === 'positive' ? positiveStyle : negativeStyle}>
+    <div id='notification' style={notification.style === 'positive' ? positiveStyle : negativeStyle}>
       {notification.message}
     </div>
   )
