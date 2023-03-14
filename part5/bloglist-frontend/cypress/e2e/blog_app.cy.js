@@ -44,5 +44,29 @@ describe('Blog app', function () {
 
       cy.contains('new title')
     })
+
+    describe('when a blog created', function () {
+      beforeEach(function () {
+        cy.contains('New Note').click()
+        cy.get('#title').type('new title')
+        cy.get('#author').type('new author')
+        cy.get('#url').type('new url')
+        cy.contains('Create').click()
+        /* cy.request({
+          method: 'POST',
+          url: 'http://localhost:3001/api/blogs',
+          body: { title: 'title', author: 'author', url: 'url' },
+          headers: {
+            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loggedBlogAppUser')).token}`
+          }
+        }) */
+      })
+      it('blogs can be liked', function () {
+        cy.contains('Show Details').click()
+        cy.contains('like').click()
+        cy.contains('Likes: 1')
+      })
+    })
+
   })
 })
