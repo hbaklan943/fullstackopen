@@ -66,6 +66,29 @@ describe('Blog app', function () {
         cy.contains('like').click()
         cy.contains('Likes: 1')
       })
+      it('user who created it can delete it', function () {
+        cy.contains('Show Details').click()
+        cy.contains('remove').click()
+        cy.should('not.contain', 'new title')
+      })
+
+      describe.only('other users', function () {
+        beforeEach(function () {
+          const otherUser = {
+            username: 'otherUsername',
+            password: 'password'
+          }
+          cy.request('POST', 'http://localhost:3001/api/users', otherUser)
+          cy.contains('Log out').click()
+          cy.get('input:first').focus().clear().type('otherUsername')
+          cy.get('input:last').focus().clear().type('password')
+          cy.contains('Login').click()
+        })
+        it('won\'t see remove button', function () {
+          cy.contains('Show Details').click()
+          cy.should('not.contain', 'remove')
+        })
+      })
     })
 
   })
