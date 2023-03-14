@@ -12,8 +12,8 @@ describe('Blog app', function () {
     cy.contains('Login')
   })
 
-  describe('Login', function () {
-    it('succeeds with correct credentials', function () {
+  describe('User', function () {
+    it('login succeeds with correct credentials', function () {
       cy.get('input:first').type('harun')
       cy.get('input:last').type('password')
       cy.contains('Login').click()
@@ -72,7 +72,7 @@ describe('Blog app', function () {
         cy.should('not.contain', 'new title')
       })
 
-      describe.only('other users', function () {
+      describe('other users', function () {
         beforeEach(function () {
           const otherUser = {
             username: 'otherUsername',
@@ -90,6 +90,27 @@ describe('Blog app', function () {
         })
       })
     })
+    describe.only('when there are 2 blogs', function () {
+      beforeEach(function () {
+        cy.contains('New Note').click()
+        cy.get('#title').type('blog with second most likes')
+        cy.get('#author').type('first author')
+        cy.get('#url').type('first url')
+        cy.contains('Create').click()
+
+        cy.get('#title').type('blog with most likes')
+        cy.get('#author').type('second author')
+        cy.get('#url').type('second url')
+        cy.contains('Create').click()
+        cy.contains('Show Details').click()
+        cy.get('.blog').contains('blog with most likes').contains('Show Details').click().parent().parent().contains('Like').click()
+      })
+      it('they should be ordered according to likes', function () {
+        cy.get('.blog').eq(0).should('contain', 'blog with most likes')
+        cy.get('.blog').eq(1).should('contain', 'blog with second most likes')
+      })
+    })
+
 
   })
 })

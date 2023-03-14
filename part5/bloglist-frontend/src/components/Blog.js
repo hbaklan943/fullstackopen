@@ -13,7 +13,7 @@ const Blog = ({ blog, user, increaseLikes, removeBlog }) => {
 
 
   return (
-    <div style={styleBlog}>
+    <div className='blog' style={styleBlog}>
       <div className='minimizedBlog'>
         {blog.title} {blog.author}
         <button className='toggleVisibility' onClick={() => { setDetailsVisibility(!detailsVisibility) }}>{detailsVisibility ? 'Hide Details' : 'Show Details'}</button>
@@ -22,7 +22,7 @@ const Blog = ({ blog, user, increaseLikes, removeBlog }) => {
 
       <div style={styleDetails} className='details'>
         <div>Url: {blog.url}</div>
-        <div>Likes: {blog.likes} <button className='likeButton' onClick={() => { increaseLikes(blog) }}>like</button></div>
+        <div>Likes: {blog.likes} <button className='likeButton' onClick={() => { increaseLikes(blog) }}>Like</button></div>
         {blog.user.username}
         <div style={user.username !== blog.user.username ? styleNone : null}>
           <button onClick={() => {
