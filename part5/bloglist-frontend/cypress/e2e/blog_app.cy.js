@@ -90,7 +90,7 @@ describe('Blog app', function () {
         })
       })
     })
-    describe.only('when there are 2 blogs', function () {
+    describe('when there are 2 blogs', function () {
       beforeEach(function () {
         cy.contains('New Note').click()
         cy.get('#title').type('blog with second most likes')
