@@ -36,4 +36,12 @@ const reducer = (state = initialState, action) => {
   }
 }
 
+export const createAnectode = (content) => {
+  return { type: 'ADD_ANECTODE', payload: { content: content } }
+}
+
+export const voteAnectode = (id) => {
+  return { type: 'VOTE', payload: { id } }
+}
+
 export default reducer
