@@ -26,6 +26,12 @@ const reducer = (state = initialState, action) => {
       const newState = state.map(anectode => anectode.id !== id ? anectode : { ...anectode, votes: anectode.votes + 1 })
       return newState
     }
+    case 'ADD_ANECTODE': {
+      const content = action.payload.content
+      const newState = [...state, { content: content, id: getId(), votes: 0 }]
+
+      return newState
+    }
     default: return state
   }
 }
