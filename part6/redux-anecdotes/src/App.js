@@ -1,6 +1,6 @@
-
-import AnectodeList from './components/AnectodeList'
-import AnectodeForm from './components/AnectodeForm'
+import Filter from './components/Filter'
+import AnecdoteList from './components/AnecdoteList'
+import AnecdoteForm from './components/AnecdoteForm'
 
 
 const App = () => {
@@ -8,8 +8,9 @@ const App = () => {
 
   return (
     <div>
-      <AnectodeList />
-      <AnectodeForm />
+      <Filter />
+      <AnecdoteList />
+      <AnecdoteForm />
     </div>
   )
 }

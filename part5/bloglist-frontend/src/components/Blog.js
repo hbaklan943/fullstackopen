@@ -34,7 +34,5 @@ const Blog = ({ blog, user, increaseLikes, removeBlog }) => {
       </div>
     </div >
   )
-
 }
-
 export default Blog
