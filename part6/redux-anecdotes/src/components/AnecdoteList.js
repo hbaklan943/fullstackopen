@@ -4,6 +4,7 @@ import {
   setNotification,
   resetNotification,
 } from "../reducers/notificationReducer";
+import { increaseVotes } from "../reducers/anecdoteReducer";
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(({ filters, anecdotes }) => {
@@ -18,9 +19,9 @@ const AnecdoteList = () => {
   });
   const dispatch = useDispatch();
 
-  const vote = (id, content) => {
-    dispatch(voteAnecdote(id));
-    dispatch(setNotification(`You voted for ${content}`));
+  const vote = (anecdote) => {
+    dispatch(increaseVotes(anecdote));
+    dispatch(setNotification(`You voted for ${anecdote.content}`));
     setTimeout(() => {
       dispatch(resetNotification());
     }, 3000);
@@ -34,9 +35,7 @@ const AnecdoteList = () => {
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => vote(anecdote.id, anecdote.content)}>
-              vote
-            </button>
+            <button onClick={() => vote(anecdote)}>vote</button>
           </div>
         </div>
       ))}

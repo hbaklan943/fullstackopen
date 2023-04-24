@@ -1,4 +1,5 @@
 import axios from "axios";
+import anecdoteReducer from "../reducers/anecdoteReducer";
 const baseUrl = "http://localhost:3001/anecdotes";
 
 const getAll = async () => {
@@ -15,4 +16,13 @@ const addNew = async (content) => {
   return response.data;
 };
 
-export default { getAll, addNew };
+const update = async (anecdote) => {
+  const object = {
+    content: anecdote.content,
+    votes: anecdote.votes,
+  };
+  const response = await axios.put(`${baseUrl}/${anecdote.id}`, object);
+  return response.data;
+};
+
+export default { getAll, addNew, update };
