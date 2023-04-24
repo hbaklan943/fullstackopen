@@ -6,11 +6,12 @@ import anecdotService from "./services/anecdotes";
 import { useEffect } from "react";
 import { setAnecdotes } from "./reducers/anecdoteReducer";
 import { useDispatch } from "react-redux";
+import { initializeAnecdotes } from "./reducers/anecdoteReducer";
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    anecdotService.getAll().then((data) => dispatch(setAnecdotes(data)));
+    dispatch(initializeAnecdotes());
   }, []);
 
   return (
