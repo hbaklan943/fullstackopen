@@ -2,17 +2,29 @@ import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import { getAnecdotes, voteAnecdote } from "./requests";
+import { useContext } from "react";
+import NotificationContext from "./NotificationContext";
 
 const App = () => {
+  const [notification, notificationDispatch] = useContext(NotificationContext);
+
   const queryClient = useQueryClient();
   const anecdoteVotesMutation = useMutation(voteAnecdote, {
-    onSuccess: () => {
+    onSuccess: (newAnecdote) => {
       queryClient.invalidateQueries("anecdotes");
+      notificationDispatch({
+        type: "SET_NOTIFICATION",
+        payload: `anecdote "${newAnecdote.content}" voted`,
+      });
+      setTimeout(() => {
+        notificationDispatch({
+          type: "RESET_NOTIFICATION",
+        });
+      }, 5000);
     },
   });
 
   const result = useQuery("anecdotes", getAnecdotes, { retry: 1 });
-  console.log(result);
 
   if (result.isLoading) {
     return <div>data loading...</div>;
