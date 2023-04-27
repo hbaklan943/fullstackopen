@@ -103,6 +103,13 @@ const CreateNew = (props) => {
     navigate("/");
   };
 
+  const handleClearform = (event) => {
+    event.preventDefault();
+    content.reset();
+    author.reset();
+    info.reset();
+  };
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -120,6 +127,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button onClick={handleClearform}>reset</button>
       </form>
     </div>
   );
